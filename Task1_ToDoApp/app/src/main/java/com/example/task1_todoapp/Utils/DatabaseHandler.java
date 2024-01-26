@@ -12,7 +12,7 @@ import com.example.task1_todoapp.Models.ToDoModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DatabaseHandler extends SQLiteOpenHelper {
+public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String NAME = "ToDoListDatabase";
     private static final String TODO_TABLE = "todo";
@@ -22,7 +22,7 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper {
     private static final String query = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                                     + TASK + "TEXT, " +STATUS + "INTEGER )";
     private SQLiteDatabase db;
-    private DatabaseHandler(Context context)
+    public DatabaseHandler(Context context)
     {
         super(context, NAME, null, VERSION);
     }
@@ -32,6 +32,12 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper {
     {
         db.execSQL(query);
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
     public void onUpdate(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         //Drop the older tables
