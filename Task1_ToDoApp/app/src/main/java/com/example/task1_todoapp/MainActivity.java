@@ -1,6 +1,7 @@
 package com.example.task1_todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
 
         db = new DatabaseHandler(this);
         db.openDatabase();
@@ -43,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         tasksRecyclerView.setAdapter(tasksAdapter);
 
         fab = findViewById(R.id.fab);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerItemTouchHelper(tasksAdapter));
+        itemTouchHelper.attachToRecyclerView(tasksRecyclerView);
 
         taskList = db.getAllTask();
         Collections.reverse(taskList);
@@ -58,6 +60,14 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
     @Override
     public void handleDialogClose(DialogInterface dialog) {
+        taskList = db.getAllTask();
+        Collections.reverse(taskList);
+        tasksAdapter.setTask(taskList);
+        tasksAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void handleDialogCLose(DialogInterface dialog) {
         taskList = db.getAllTask();
         Collections.reverse(taskList);
         tasksAdapter.setTask(taskList);
